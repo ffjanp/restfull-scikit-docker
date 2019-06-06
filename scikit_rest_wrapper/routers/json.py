@@ -55,3 +55,14 @@ def predict():
 @as_json
 def predict_proba():
     return controllers.predict_proba(request.parsed)
+
+@router.route('/predict_batch', methods=['POST'])
+@as_json
+def predict__batch():
+    return controllers.predict_batch(request.parsed)
+
+@router.route('/predict_batch/proba', methods=['POST'])
+@as_json
+def predict__batch_proba():
+    return controllers.predict_batch_proba(request.parsed)
+

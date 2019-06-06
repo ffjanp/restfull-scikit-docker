@@ -39,6 +39,9 @@ class Schema(object):
     def load(self, data):
         return self.schema.load(data).data
 
+    def load_many(self,data):
+        return self.schema.load(data,many=True).data
+
     @staticmethod
     def status(loader):
         try:

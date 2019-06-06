@@ -1,3 +1,4 @@
+import pandas as pd
 from ..models import Model, Schema
 from ..util import Loader
 import socket
@@ -42,7 +43,9 @@ def predict(data):
     model_schema = Schema(Loader())
     model = Model(Loader())
 
-    X = model_schema.load(data)
+    X = pd.DataFrame([model_schema.load(data)])
+    X['PUBLICATION_MONTH'] = \
+        X['PUBLICATION_MONTH'].astype('object')
     y = model.predict(X)
 
     data['target'] = y[0]
@@ -59,9 +62,50 @@ def predict_proba(data):
     model_schema = Schema(Loader())
     model = Model(Loader())
 
-    X = model_schema.load(data)
+    X = pd.DataFrame([model_schema.load(data)])
+    X['PUBLICATION_MONTH'] = \
+        X['PUBLICATION_MONTH'].astype('object')
     y = model.predict_proba(X)
 
     data['target'] = y[0]
 
     return data
+
+def predict_batch(data):
+    """
+    :param data: An datastructure serializable by the model schema
+    :return: A copy of data with added the predicted class
+    """
+    model_schema = Schema(Loader())
+    model = Model(Loader())
+
+    X = pd.DataFrame(model_schema.load_many(data))
+    X['PUBLICATION_MONTH'] = \
+        X['PUBLICATION_MONTH'].astype('object')
+
+    y = model.predict(X)
+    for i in range(len(data)):
+        data[i]['target'] = y[i]
+
+    return data
+
+
+def predict_batch_proba(data):
+    """
+
+    :param data: An datastructure serializable by the model schema
+    :return: A copy of data with added the prediction
+    """
+    model_schema = Schema(Loader())
+    model = Model(Loader())
+
+    X = pd.DataFrame(model_schema.load_many(data))
+    X['PUBLICATION_MONTH'] = \
+        X['PUBLICATION_MONTH'].astype('object')
+    y = model.predict_proba(X)
+    for i in range(len(data)):
+        data[i]['target'] = y[i]
+
+    return data
+
+    
