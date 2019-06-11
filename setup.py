@@ -12,8 +12,8 @@ setup(
     install_requires = [
         'numpy',
         'scipy',
-        'scikit-learn[alldeps]',
-        'marshmallow',
+        'scikit-learn==0.19',
+        'toastedmarshmallow==0.1.0',
         'flask',
         'werkzeug',
         'flask_json'

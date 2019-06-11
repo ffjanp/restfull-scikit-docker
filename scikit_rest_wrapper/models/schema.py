@@ -1,3 +1,4 @@
+import toastedmarshmallow
 import marshmallow
 from ..exceptions.http import SchemaNotValid, SchemaNotPresent
 
@@ -6,6 +7,7 @@ class Schema(object):
     def __init__(self, loader):
         self.loader = loader
         self.schema = self._get()
+        self.schema.jit = toastedmarshmallow.CythonJit
 
     def _get(self):
         # TODO: handle errors here
