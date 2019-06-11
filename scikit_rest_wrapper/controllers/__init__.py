@@ -42,10 +42,8 @@ def predict(data):
     """
     model_schema = Schema(Loader())
     model = Model(Loader())
-
-    X = pd.DataFrame([model_schema.load(data)])
-    X['PUBLICATION_MONTH'] = \
-        X['PUBLICATION_MONTH'].astype('object')
+    X = model_schema.load(data)
+    X = model_schema.post_transform(X)
     y = model.predict(X)
 
     data['target'] = y[0]
@@ -61,12 +59,10 @@ def predict_proba(data):
     """
     model_schema = Schema(Loader())
     model = Model(Loader())
+    X = model_schema.load(data)
+    X = model_schema.post_transform(X)
 
-    X = pd.DataFrame([model_schema.load(data)])
-    X['PUBLICATION_MONTH'] = \
-        X['PUBLICATION_MONTH'].astype('object')
     y = model.predict_proba(X)
-
     data['target'] = y[0]
 
     return data
@@ -78,10 +74,8 @@ def predict_batch(data):
     """
     model_schema = Schema(Loader())
     model = Model(Loader())
-
-    X = pd.DataFrame(model_schema.load_many(data))
-    X['PUBLICATION_MONTH'] = \
-        X['PUBLICATION_MONTH'].astype('object')
+    X = model_schema.load_many(data)
+    X = model_schema.post_transform(X)
 
     y = model.predict(X)
     for i in range(len(data)):
@@ -98,10 +92,9 @@ def predict_batch_proba(data):
     """
     model_schema = Schema(Loader())
     model = Model(Loader())
+    X = model_schema.load_many(data)
+    X = model_schema.post_transform(X)
 
-    X = pd.DataFrame(model_schema.load_many(data))
-    X['PUBLICATION_MONTH'] = \
-        X['PUBLICATION_MONTH'].astype('object')
     y = model.predict_proba(X)
     for i in range(len(data)):
         data[i]['target'] = y[i]

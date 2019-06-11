@@ -44,6 +44,9 @@ class Schema(object):
     def load_many(self,data):
         return self.schema.load(data,many=True).data
 
+    def post_transform(self,data):
+        return self.schema.post_transform(data)
+
     @staticmethod
     def status(loader):
         try:
