@@ -1,7 +1,13 @@
 import pandas as pd
+import socket
+import os
+
 from ..models import Model, Schema
 from ..util import Loader
-import socket
+
+REGION = str(os.environ.get('REGION','not set'))
+COMMIT_HASH= str(os.environ.get('COMMIT_HASH','not set'))
+BUILD_NUMBER= str(os.environ.get('BUILD_NUMBER','not set'))
 
 
 def index():
@@ -27,13 +33,14 @@ def status():
         status_code = 500
     else:
         status_code = 200
-
     return {
         'schema': schema_status,
         'model': model_status,
-        'hostname': socket.gethostname()
+        'hostname': socket.gethostname(),
+        'region' : REGION,
+        'COMMIT_HASH':COMMIT_HASH,
+        'BUILD_NUMBER':BUILD_NUMBER
     }, status_code
-
 
 def predict(data):
     """
